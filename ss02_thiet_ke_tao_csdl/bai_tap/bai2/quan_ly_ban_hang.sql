@@ -5,7 +5,7 @@ c_id int primary key,
 c_name varchar(225),
 c_age int
 );
-create table order(
+create table order_product(
 o_id int primary key,
 c_id int,
 o_date date,
@@ -23,9 +23,9 @@ p_id int,
 od_qty varchar(225),
 primary key(o_id,p_id),
 foreign key (p_id) references product(p_id),
-foreign key (o_id) references order(o_id)
+foreign key (o_id) references order_product(o_id)
 );
 select * from customer;
-select * from oder;
-select * from ;
-select * from customer;
+select * from order_product;
+select * from product;
+select * from order_detail;
