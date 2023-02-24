@@ -41,9 +41,20 @@ value(1,'May Giat',3),
 (5,'Bep Dien',2);
 insert into order_detail
 value(1,1,3),(1,3,7),(1,4,2),(2,1,1),(3,1,8),(2,5,4),(2,3,3);
-select * from order_product;
+select c_id, o_date, o_total_price from order_product;
 select customer.c_name, product.p_name
 from customer inner join order_product on customer.c_id = order_product.c_id
 inner join order_detail on order_product.o_id=order_detail.o_id
 inner join product on order_detail.p_id = product.p_id;
 select customer.c_name
+from customer left join order_product on customer.c_id = order_product.c_id
+where order_product.c_id is null;
+select order_product.o_id, o_date, sum(product.p_price * order_detail.od_qty) as total_price
+from order_product 
+inner join order_detail on order_product.o_id = order_detail.o_id
+inner join product on order_detail.p_id = product.p_id
+group by order_product.o_id;
+
+
+
+

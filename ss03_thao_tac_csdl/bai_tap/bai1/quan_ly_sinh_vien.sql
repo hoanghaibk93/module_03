@@ -56,7 +56,7 @@ update student set class_id = 2 where student_id = 1;
 select student.student_name, subject.sub_name, mark.mark
 from student inner join mark on student.student_id = mark.student_id
 inner join subject on mark.sub_id = subject.sub_id
-order by mark desc, student_name;
+order by mark.mark desc, student.student_name;
 
 
 
