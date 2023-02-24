@@ -30,3 +30,10 @@ select * from teacher;
 update teacher
 set age = 40
 where id = 2;
+insert into teacher
+value(4,'Cong',40,'VN'),
+(3,'Hai',30,'VN');
+select * from teacher
+WHERE country = 'VN'
+limit 1;
+select min(age) as 'tuoinho' from teacher;
