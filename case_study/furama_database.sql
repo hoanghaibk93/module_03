@@ -203,12 +203,18 @@ inner join loai_khach l on l.ma_loai_khach = k.ma_loai_khach
 where ten_loai_khach = 'Diamond'
 group by h.ma_khach_hang
 order by so_lan_dat_phong;
-select *
+set sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+select k.ma_khach_hang, k.ho_ten, l.ten_loai_khach, h.ma_hop_dong, d.ten_dich_vu, h.ngay_lam_hop_dong, h.ngay_ket_thuc, sum(ifnull(d.chi_phi_thue,0) + ifnull(hd.so_luong,0) * ifnull(dv.gia,0)) as tongtien
 from khach_hang k 
-inner join hop_dong h on k.ma_khach_hang = h.ma_khach_hang 
-inner join loai_khach l on l.ma_loai_khach = k.ma_loai_khach
-inner join hop_dong_chi_tiet hd on hd.ma_khach_hang = m.ma_khach_hang
-inner join dich vu d on d.ma_loai_dich_vu = 
+left join hop_dong h on k.ma_khach_hang = h.ma_khach_hang 
+left join loai_khach l on l.ma_loai_khach = k.ma_loai_khach
+left join hop_dong_chi_tiet hd on hd.ma_hop_dong = h.ma_hop_dong
+left join dich_vu d on d.ma_dich_vu = h.ma_dich_vu 
+left join dich_vu_di_kem dv on dv.ma_dich_vu_di_kem = hd.ma_dich_vu_di_kem 
+group by h.ma_hop_dong, k.ma_khach_hang;
+
+
+
 
 
 
