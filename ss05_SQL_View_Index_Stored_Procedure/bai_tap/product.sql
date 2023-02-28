@@ -23,4 +23,24 @@ from products
 where product_code = 'xxvl-004';
 create view view_products 
 as 
-select f
+select product_code, product_name, product_price, product_status
+from products;
+select * from view_products;
+update view_products
+set product_name = 'điện thoai'
+where product_code = 'xxvl-005';
+drop view view_products;
+delimiter $$
+create procedure method_products()
+begin 
+ select * from products;
+ end $$
+delimiter ;
+ call method_products()
+delimiter $$
+create procedure and_method_products()
+begin 
+ select * from products;
+ end $$
+delimiter ; 
+ 
