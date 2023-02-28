@@ -183,6 +183,7 @@ value(1,'2020-12-08','2020-12-08',0,3,1,3),
 (10,'2021-04-12','2021-04-14',0,10,3,5),
 (11,'2021-04-25','2021-04-25',0,2,2,1),
 (12,'2021-05-25','2021-05-27',0,7,10,1);
+
 insert into hop_dong_chi_tiet
 value(1,2,4,5),
 (2,2,5,8),
@@ -213,8 +214,61 @@ left join dich_vu d on d.ma_dich_vu = h.ma_dich_vu
 left join dich_vu_di_kem dv on dv.ma_dich_vu_di_kem = hd.ma_dich_vu_di_kem 
 group by h.ma_hop_dong, k.ma_khach_hang;
 
+select dv.ma_dich_vu, dv.ten_dich_vu, dv.dien_tich, dv.chi_phi_thue, ldv.ten_loai_dich_vu
+from dich_vu dv
+left join hop_dong hd on dv.ma_dich_vu = hd.ma_dich_vu
+left join loai_dich_vu ldv on ldv.ma_loai_dich_vu = dv.ma_loai_dich_vu
+where month(hd.ngay_lam_hop_dong) not between 1 and 3
+group by dv.ten_dich_vu;
 
-
-
+select dv.ma_dich_vu, dv.ten_dich_vu, dv.dien_tich, dv.so_nguoi_toi_da, dv.chi_phi_thue, ldv.ten_loai_dich_vu, hd.ngay_lam_hop_dong
+from dich_vu dv
+left join hop_dong hd on dv.ma_dich_vu = hd.ma_dich_vu
+left join loai_dich_vu ldv on ldv.ma_loai_dich_vu = dv.ma_loai_dich_vu
+where dv.ma_dich_vu in (select dv.ma_dich_vu from dich_vu dv where year(hd.ngay_lam_hop_dong) = 2020 ) and dv.ma_dich_vu not in (select dv.ma_dich_vu from dich_vu dv where year(hd.ngay_lam_hop_dong) = 2021)
+group by dv.ten_dich_vu;
+-- -----task 8--------
+select ho_ten 
+from khach_hang
+group by ho_ten;
+select distinct ho_ten 
+from khach_hang;
+-- -----task 9---------
+select count(ma_khach_hang) as so_luong_khach_hang_dat_phong, month(ngay_lam_hop_dong) as thang
+from hop_dong
+where year(ngay_lam_hop_dong) = 2021
+group by thang
+order by thang;
+-- -------task 10----------
+select hd.ma_hop_dong, hd.ngay_lam_hop_dong, hd.ngay_ket_thuc, hd.tien_dat_coc, sum(ifnull(hdct.so_luong,0)) as so_luong_dich_vu_di_kem
+from hop_dong hd
+left join dich_vu dv on hd.ma_dich_vu = dv.ma_dich_vu
+left join hop_dong_chi_tiet hdct on hd.ma_hop_dong = hdct.ma_hop_dong
+group by hd.ma_hop_dong;
+-- -------task 11-----------
+select dvdk.ma_dich_vu_di_kem, dvdk.ten_dich_vu_di_kem
+from dich_vu_di_kem dvdk
+inner join hop_dong_chi_tiet hdct on hdct.ma_dich_vu_di_kem = dvdk.ma_dich_vu_di_kem
+inner join hop_dong hd on hd.ma_hop_dong = hdct.ma_hop_dong
+inner join khach_hang kh on kh.ma_khach_hang = hd.ma_khach_hang
+inner join loai_khach lk on lk.ma_loai_khach = kh.ma_loai_khach
+where lk.ten_loai_khach = 'Diamond' and (kh.dia_chi like'%Vinh%' or kh.dia_chi like'%Quảng Ngãi%');
+-- ---------task 12------------
+select hd.ma_hop_dong,nv.ho_ten, kh.ho_ten, kh.so_dien_thoai, dv.ten_dich_vu, sum(ifnull(hdct.so_luong,0)) as so_luong_dich_vu_di_kem, hd.tien_dat_coc
+from hop_dong hd
+left join khach_hang kh on hd.ma_khach_hang = kh.ma_khach_hang
+left join dich_vu dv on dv.ma_dich_vu = hd.ma_dich_vu
+left join hop_dong_chi_tiet hdct on hdct.ma_hop_dong = hd.ma_hop_dong
+left join nhan_vien nv on nv.ma_nhan_vien = hd.ma_nhan_vien
+where dv.ma_dich_vu in (select dv.ma_dich_vu from dich_vu dv where (year(hd.ngay_lam_hop_dong) = 2020 and (month(hd.ngay_lam_hop_dong) between 10 and 12)))
+and dv.ma_dich_vu not in (select dv.ma_dich_vu from dich_vu dv where year(hd.ngay_lam_hop_dong) = 2021 and (month(hd.ngay_lam_hop_dong) between 1 and 6))
+group by hd.ma_hop_dong;
+-- ---------task 13------------
+select hdct.ma_dich_vu_di_kem, dvdk.ten_dich_vu_di_kem, sum(hdct.so_luong) as so_luong_dich_vu_di_kem
+from dich_vu_di_kem dvdk
+inner join hop_dong_chi_tiet hdct on hdct.ma_dich_vu_di_kem = dvdk.ma_dich_vu_di_kem
+inner join hop_dong hd on hd.ma_hop_dong = hdct.ma_hop_dong
+group by hdct.ma_dich_vu_di_kem
+having  so_luong_dich_vu_di_kem >2
 
 
