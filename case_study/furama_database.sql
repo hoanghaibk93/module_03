@@ -209,7 +209,7 @@ group by h.ma_khach_hang
 order by so_lan_dat_phong;
 -- ---------task 5------------
 set sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
-select k.ma_khach_hang, k.ho_ten, l.ten_loai_khach, h.ma_hop_dong, d.ten_dich_vu, h.ngay_lam_hop_dong, h.ngay_ket_thuc, sum(ifnull(d.chi_phi_thue,0) + ifnull(hd.so_luong,0) * ifnull(dv.gia,0)) as tongtien
+select k.ma_khach_hang, k.ho_ten, l.ten_loai_khach, h.ma_hop_dong, d.ten_dich_vu, h.ngay_lam_hop_dong, h.ngay_ket_thuc, (ifnull(d.chi_phi_thue,0) + sum(ifnull(hd.so_luong,0) * ifnull(dv.gia,0))) as tong_tien
 from khach_hang k 
 left join hop_dong h on k.ma_khach_hang = h.ma_khach_hang 
 left join loai_khach l on l.ma_loai_khach = k.ma_loai_khach
@@ -267,23 +267,20 @@ left join nhan_vien nv on nv.ma_nhan_vien = hd.ma_nhan_vien
 where dv.ma_dich_vu in (select dv.ma_dich_vu from dich_vu dv where (year(hd.ngay_lam_hop_dong) = 2020 and (month(hd.ngay_lam_hop_dong) between 10 and 12)))
 and dv.ma_dich_vu not in (select dv.ma_dich_vu from dich_vu dv where year(hd.ngay_lam_hop_dong) = 2021 and (month(hd.ngay_lam_hop_dong) between 1 and 6))
 group by hd.ma_hop_dong;
--- ---------task 13------------ check lai
-
+-- ----------task 13------------------------
+create view task_13 as
 select hdct.ma_dich_vu_di_kem, dvdk.ten_dich_vu_di_kem, sum(hdct.so_luong) as so_luong_dich_vu_di_kem
 from dich_vu_di_kem dvdk
 inner join hop_dong_chi_tiet hdct on hdct.ma_dich_vu_di_kem = dvdk.ma_dich_vu_di_kem
 inner join hop_dong hd on hd.ma_hop_dong = hdct.ma_hop_dong
-group by hdct.ma_dich_vu_di_kem
-having so_luong_dich_vu_di_kem = (select max(so_luong) from hop_dong_chi_tiet);
-
-having sum(hdct.so_luong) in (select sum(hdct.so_luong) = max(sum(hdct.so_luong)));
+group by hdct.ma_dich_vu_di_kem;
+select *  from task_13
+where so_luong_dich_vu_di_kem in (select max(so_luong_dich_vu_di_kem) from task_13);
 -- ----------task 14------------------------
 select hd.ma_hop_dong, ldv.ten_loai_dich_vu, dvdk.ten_dich_vu_di_kem, count(hdct.ma_dich_vu_di_kem) as so_lan_su_dung
 from hop_dong hd
-inner join khach_hang kh on hd.ma_khach_hang = kh.ma_khach_hang
 inner join dich_vu dv on dv.ma_dich_vu = hd.ma_dich_vu
 inner join hop_dong_chi_tiet hdct on hdct.ma_hop_dong = hd.ma_hop_dong
-inner join nhan_vien nv on nv.ma_nhan_vien = hd.ma_nhan_vien
 inner join loai_dich_vu ldv on ldv.ma_loai_dich_vu = dv.ma_loai_dich_vu
 inner join dich_vu_di_kem dvdk on dvdk.ma_dich_vu_di_kem = hdct.ma_dich_vu_di_kem
 group by hdct.ma_dich_vu_di_kem
@@ -295,5 +292,28 @@ inner join nhan_vien nv on nv.ma_nhan_vien = hd.ma_nhan_vien
 inner join trinh_do td on td.ma_trinh_do = nv.ma_trinh_do
 inner join bo_phan bp on bp.ma_bo_phan = nv.ma_bo_phan
 group by hd.ma_nhan_vien
-having count(hd.ma_nhan_vien) <= 3
-
+having count(hd.ma_nhan_vien) <= 3;
+-- ---task16--------------------
+delete from nhan_vien 
+where nhan_vien.ma_nhan_vien not in (select ma_nhan_vien 
+from hop_dong
+where year(ngay_lam_hop_dong) between 2019 and 2021
+group by nhan_vien.ma_nhan_vien);
+-- ---task17--------------------
+create view task_17
+as
+select k.ma_khach_hang, k.ho_ten, (ifnull(d.chi_phi_thue,0) + sum(ifnull(hd.so_luong,0) * ifnull(dv.gia,0))) as tong_tien
+from khach_hang k 
+left join hop_dong h on k.ma_khach_hang = h.ma_khach_hang 
+left join loai_khach l on l.ma_loai_khach = k.ma_loai_khach
+left join hop_dong_chi_tiet hd on hd.ma_hop_dong = h.ma_hop_dong
+left join dich_vu d on d.ma_dich_vu = h.ma_dich_vu 
+left join dich_vu_di_kem dv on dv.ma_dich_vu_di_kem = hd.ma_dich_vu_di_kem 
+where year(h.ngay_lam_hop_dong) = 2021
+group by h.ma_hop_dong, k.ma_khach_hang
+having tong_tien >10000000;
+select * from task_17;
+update khach_hang
+set  ma_loai_khach = 1
+where ma_loai_khach = 2
+and khach_hang.ma_khach_hang =  (select task_17.ma_khach_hang from task_17)
