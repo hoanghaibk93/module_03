@@ -218,25 +218,47 @@ left join dich_vu d on d.ma_dich_vu = h.ma_dich_vu
 left join dich_vu_di_kem dv on dv.ma_dich_vu_di_kem = hd.ma_dich_vu_di_kem 
 group by h.ma_hop_dong, k.ma_khach_hang;
 -- ---------task 6------------ check lại
-select dv.ma_dich_vu, dv.ten_dich_vu, dv.dien_tich, dv.chi_phi_thue, ldv.ten_loai_dich_vu
-from dich_vu dv
-left join hop_dong hd on dv.ma_dich_vu = hd.ma_dich_vu
-left join loai_dich_vu ldv on ldv.ma_loai_dich_vu = dv.ma_loai_dich_vu
-where (month(hd.ngay_lam_hop_dong) not between 1 and 3 and year(hd.ngay_lam_hop_dong) = 2021)
-group by dv.ten_dich_vu;
-
+select dich_vu.ma_dich_vu, dich_vu.ten_dich_vu, dich_vu.dien_tich, dich_vu.chi_phi_thue, loai_dich_vu.ten_loai_dich_vu
+from dich_vu 
+inner join loai_dich_vu on dich_vu.ma_loai_dich_vu = loai_dich_vu.ma_loai_dich_vu
+where not exists 
+(select * from hop_dong 
+where dich_vu.ma_dich_vu = hop_dong.ma_dich_vu 
+and year(hop_dong.ngay_lam_hop_dong) = 2021
+and (month(hop_dong.ngay_lam_hop_dong) between 1 and 3));
+-- cách 2----
+select dich_vu.ma_dich_vu, dich_vu.ten_dich_vu, dich_vu.dien_tich, dich_vu.chi_phi_thue, loai_dich_vu.ten_loai_dich_vu
+from dich_vu 
+inner join loai_dich_vu on dich_vu.ma_loai_dich_vu = loai_dich_vu.ma_loai_dich_vu
+inner join hop_dong  on dich_vu.ma_dich_vu = hop_dong.ma_dich_vu
+where dich_vu.ma_dich_vu not in (select ma_dich_vu from hop_dong
+where year(hop_dong.ngay_lam_hop_dong) = 2021
+and (month(hop_dong.ngay_lam_hop_dong) between 1 and 3))
+group by ma_dich_vu ;
 -- ---------task 7------------
 select dv.ma_dich_vu, dv.ten_dich_vu, dv.dien_tich, dv.so_nguoi_toi_da, dv.chi_phi_thue, ldv.ten_loai_dich_vu, hd.ngay_lam_hop_dong
 from dich_vu dv
 left join hop_dong hd on dv.ma_dich_vu = hd.ma_dich_vu
 left join loai_dich_vu ldv on ldv.ma_loai_dich_vu = dv.ma_loai_dich_vu
-where dv.ma_dich_vu in (select dv.ma_dich_vu from dich_vu dv where year(hd.ngay_lam_hop_dong) = 2020 ) and dv.ma_dich_vu not in (select dv.ma_dich_vu from dich_vu dv where year(hd.ngay_lam_hop_dong) = 2021)
+where dv.ma_dich_vu in 
+(select ma_dich_vu 
+from hop_dong 
+where year(hd.ngay_lam_hop_dong) = 2020) 
+and (dv.ma_dich_vu not in 
+(select ma_dich_vu 
+from hop_dong 
+where year(hd.ngay_lam_hop_dong) = 2021))
 group by dv.ten_dich_vu;
 -- -----task 8--------
 select ho_ten 
 from khach_hang
 group by ho_ten;
 select distinct ho_ten 
+from khach_hang;
+select ho_ten 
+from khach_hang
+union
+select ho_ten 
 from khach_hang;
 -- -----task 9---------
 select count(ma_khach_hang) as so_luong_khach_hang_dat_phong, month(ngay_lam_hop_dong) as thang
@@ -263,10 +285,10 @@ select hd.ma_hop_dong,nv.ho_ten, kh.ho_ten, kh.so_dien_thoai, dv.ten_dich_vu, su
 from hop_dong hd
 left join khach_hang kh on hd.ma_khach_hang = kh.ma_khach_hang
 left join dich_vu dv on dv.ma_dich_vu = hd.ma_dich_vu
-left join hop_dong_chi_tiet hdct on hdct.ma_hop_dong = hd.ma_hop_dong
-left join nhan_vien nv on nv.ma_nhan_vien = hd.ma_nhan_vien
-where dv.ma_dich_vu in (select dv.ma_dich_vu from dich_vu dv where (year(hd.ngay_lam_hop_dong) = 2020 and (month(hd.ngay_lam_hop_dong) between 10 and 12)))
-and dv.ma_dich_vu not in (select dv.ma_dich_vu from dich_vu dv where year(hd.ngay_lam_hop_dong) = 2021 and (month(hd.ngay_lam_hop_dong) between 1 and 6))
+left  join hop_dong_chi_tiet hdct on hdct.ma_hop_dong = hd.ma_hop_dong
+left  join nhan_vien nv on nv.ma_nhan_vien = hd.ma_nhan_vien
+where (year(hd.ngay_lam_hop_dong) = 2020 and (month(hd.ngay_lam_hop_dong) between 10 and 12))
+and hd.ma_hop_dong not in (select ma_hop_dong from hop_dong where year(hd.ngay_lam_hop_dong) = 2021 and (month(hd.ngay_lam_hop_dong) between 1 and 6))
 group by hd.ma_hop_dong;
 -- ----------task 13------------------------
 create view task_13 as
@@ -328,15 +350,15 @@ and year(hd.ngay_lam_hop_dong) < 2021);
 -- ------task19--------------
 update dich_vu_di_kem
 set gia = gia * 2
-where dich_vu_di_kem.ma_dich_vu_di_kem in
-(select hdct.ma_dich_vu_di_kem  from hop_dong_chi_tiet hdct
+where ma_dich_vu_di_kem in
+(select ma_dich_vu_di_kem  from hop_dong_chi_tiet hdct
 inner join hop_dong hd on hd.ma_hop_dong = hdct.ma_hop_dong
 where year(hd.ngay_lam_hop_dong) = 2020
 group by hdct.ma_dich_vu_di_kem
 having sum(hdct.so_luong) > 10);
 -- ------task20--------------
-select nv.ma_nhan_vien as id, nv.ho_ten, nv.email, nv.so_dien_thoai, nv.ngay_sinh, nv.dia_chi 
-from nhan_vien nv
+select ma_nhan_vien as id , ho_ten, email, so_dien_thoai, ngay_sinh, dia_chi
+from nhan_vien
 union all
-select kh.ma_khach_hang, kh.ho_ten, kh.email, kh.so_dien_thoai, kh.ngay_sinh, kh.dia_chi 
-from khach_hang kh
+select ma_khach_hang , ho_ten, email, so_dien_thoai, ngay_sinh, dia_chi 
+from khach_hang
