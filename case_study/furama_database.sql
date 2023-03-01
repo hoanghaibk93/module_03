@@ -217,13 +217,14 @@ left join hop_dong_chi_tiet hd on hd.ma_hop_dong = h.ma_hop_dong
 left join dich_vu d on d.ma_dich_vu = h.ma_dich_vu 
 left join dich_vu_di_kem dv on dv.ma_dich_vu_di_kem = hd.ma_dich_vu_di_kem 
 group by h.ma_hop_dong, k.ma_khach_hang;
--- ---------task 6------------
+-- ---------task 6------------ check lại
 select dv.ma_dich_vu, dv.ten_dich_vu, dv.dien_tich, dv.chi_phi_thue, ldv.ten_loai_dich_vu
 from dich_vu dv
 left join hop_dong hd on dv.ma_dich_vu = hd.ma_dich_vu
 left join loai_dich_vu ldv on ldv.ma_loai_dich_vu = dv.ma_loai_dich_vu
-where month(hd.ngay_lam_hop_dong) not between 1 and 3
+where (month(hd.ngay_lam_hop_dong) not between 1 and 3 and year(hd.ngay_lam_hop_dong) = 2021)
 group by dv.ten_dich_vu;
+
 -- ---------task 7------------
 select dv.ma_dich_vu, dv.ten_dich_vu, dv.dien_tich, dv.so_nguoi_toi_da, dv.chi_phi_thue, ldv.ten_loai_dich_vu, hd.ngay_lam_hop_dong
 from dich_vu dv
@@ -316,4 +317,26 @@ select * from task_17;
 update khach_hang
 set  ma_loai_khach = 1
 where ma_loai_khach = 2
-and khach_hang.ma_khach_hang =  (select task_17.ma_khach_hang from task_17)
+and khach_hang.ma_khach_hang =  (select task_17.ma_khach_hang from task_17);
+-- ---task18--------------------
+set foreign_key_checks = 0;
+delete from khach_hang kh
+where exists 
+(select * from hop_dong hd
+where  kh.ma_khach_hang = hd.ma_khach_hang
+and year(hd.ngay_lam_hop_dong) < 2021);
+-- ------task19--------------
+update dich_vu_di_kem
+set gia = gia * 2
+where dich_vu_di_kem.ma_dich_vu_di_kem in
+(select hdct.ma_dich_vu_di_kem  from hop_dong_chi_tiet hdct
+inner join hop_dong hd on hd.ma_hop_dong = hdct.ma_hop_dong
+where year(hd.ngay_lam_hop_dong) = 2020
+group by hdct.ma_dich_vu_di_kem
+having sum(hdct.so_luong) > 10);
+-- ------task20--------------
+select nv.ma_nhan_vien as id, nv.ho_ten, nv.email, nv.so_dien_thoai, nv.ngay_sinh, nv.dia_chi 
+from nhan_vien nv
+union all
+select kh.ma_khach_hang, kh.ho_ten, kh.email, kh.so_dien_thoai, kh.ngay_sinh, kh.dia_chi 
+from khach_hang kh
