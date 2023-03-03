@@ -1,0 +1,24 @@
+span{
+    color: blue;
+}
+#blue{
+    color: aqua;
+}
+.black{
+    color: black;
+    font-weight: bold;
+}
+div{
+    text-indent: 1cm;
+}
+body{
+    text-align: left;
+    font-size: medium;
+    width: 550px;
+}
+#space{
+    word-spacing: 12px;
+}
+sup {
+    font-size: 7px;
+}
