@@ -16,6 +16,7 @@ body{
     border: 1px solid red;
     margin-bottom: 5px;
     color: white;
+    position: fixed;
 }
 #header-link{
     width: 100%;
@@ -54,6 +55,8 @@ body{
 }
 #header h1{
     margin: 5px;
+    box-shadow: 5px 5px 5px yellow;
+    width: 20%;
 }
 #header-link ul li{
     list-style: none;
