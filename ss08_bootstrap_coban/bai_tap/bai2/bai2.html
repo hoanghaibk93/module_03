@@ -3,44 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link type="text/css" href="../../../bootstrap-5.1.3-dist/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../bootstrap-5.1.3-dist/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" href="#">Microsoft</a>
+        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler"
+                data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a aria-current="page" class="nav-link active" href="#">Surface</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
+                    <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                       id="navbarDropdown" role="button">
+                        Computer
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    <ul aria-labelledby="navbarDropdown" class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Laptop</a></li>
+                        <li><a class="dropdown-item" href="#">Ipad</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Macbook</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled">Disabled</a>
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                       id="dropdown"
+                       role="button">
+                        Computer for Business
+                    </a>
+                    <ul aria-labelledby="dropdown" class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Laptop</a></li>
+                        <li><a class="dropdown-item" href="#">Ipad</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Macbook</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                       id="dropdown2"
+                       role="button">
+                        More
+                    </a>
+                    <ul aria-labelledby="dropdown2" class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Laptop</a></li>
+                        <li><a class="dropdown-item" href="#">Ipad</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Macbook</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <button class="btn btn-primary" type="button">SHOP DEALS</button>
+                </li>
+                <li class="nav-item dropdown">
+                    <a aria-expanded="alse" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                       id="dropdown3"
+                       role="button">
+                        All Microsoft
+                    </a>
                 </li>
             </ul>
             <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <input aria-label="Search" class="form-control me-2" placeholder="Search" type="search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
     </div>
 </nav>
+<div class="row">
+    <div class="col-6">
+        <h1 class="display-3">Laptops designed by Microsoft</h1>
+        <p class="display-6">Make an impact this Women’s History Month with the blazing fast, sophisticated style of
+            Surface Laptop 5.</p>
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Shop Surface Laptop 5</a></li>
+                <li aria-current="page" class="breadcrumb-item active">Explore all</li>
+            </ol>
+        </nav>
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Microsoft Women</a></li>
+                <li aria-current="page" class="breadcrumb-item active">Watch video</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="col-6">
+        <img alt="..." class="card-img-top" src="24234.jpg">
+    </div>
+</div>
+<h1 class="display-3 bg-primary text-light">New laptop 2023</h1>
+<div class="container">
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <img height="400" alt="..." class="card-img-top" src="2.webp">
+            <div class="card-body">
+                <h4 class="card-title text-center" >Ipad pro max</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card">
+            <img height="200" alt="..." class="card-img-top" src="1.webp">
+            <div class="card-body">
+                <h4 class="card-title text-center" >Max book</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card">
+            <img height="200" alt="..." class="card-img-top" src="4.webp">
+            <div class="card-body">
+                <h4 class="card-title text-center" >Ipad pro max 2023</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
 </body>
 </html>
