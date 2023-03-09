@@ -21,10 +21,13 @@ public class DisplayDiscount extends HttpServlet {
         float discountAmount = price * percent * 0.01f;
         float discountPrice = price - discountAmount;
         PrintWriter printWriter = response.getWriter();
-        printWriter.print("<h1>Product Description: " + product + "<h1>");
-        printWriter.print("<h1>List Price: " + price + "<h1>");
-        printWriter.print("<h1>Discount Percent: " + percent + "<h1>");
-        printWriter.print("<h1>Discount Amount: " + discountAmount + "<h1>");
-        printWriter.print("<h1>Discount Price: " + discountPrice + "<h1>");
+        printWriter.print("<table border = 1 style=\"border: solid 1px red\">");
+        printWriter.print("<tr><td>Product Description </td><td>" + product + "</td></tr>");
+        printWriter.print("<tr><td>List Price </td><td>" + price + "</td></tr>");
+        printWriter.print("<tr><td>Discount Percent </td><td>" + percent + "</td></tr>");
+        printWriter.print("<tr><td>Discount Amount </td><td>" + discountAmount + "</td></tr>");
+        printWriter.print("<tr><td>Discount Price </td><td>" + discountPrice + "</td></tr>");
+        printWriter.print("</table>");
+
     }
 }

@@ -9,22 +9,27 @@
             integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
             crossorigin="anonymous"></script>
     <style>
-        div{
+        div {
             margin: 10px 50px;
+        }
+
+        form {
+            border: 1px solid coral;
+            background: beige;
+            width: 40%;
         }
     </style>
 </head>
 <body>
 <form action="/DisplayDiscount" method="post">
-    <div><h1>Product Discount Calculator</h1></div>
-    <div><label for="des">Product Description:</label></div>
-    <div><input type="text" id="des" name="description" placeholder="Description"></div>
-    <div><label for="price">List Price:</label></div>
+    <div><h4 class="text-primary">Product Discount Calculator</h4></div>
+    <div><label class="text-info" for="des">Product Description:</label></div>
+    <div><textarea id="des" name="description" placeholder="Description"></textarea></div>
+    <div><label class="text-info" for="price">List Price:</label></div>
     <div><input type="text" id="price" name="price" placeholder="Price"></div>
-    <div><label for="percent">Discount Percent:</label></div>
+    <div><label class="text-info" for="percent">Discount Percent:</label></div>
     <div><input type="text" id="percent" name="percent" placeholder="Percent"></div>
-    <div><input type="submit" value="Calculator Discount"></div>
-
+    <div><input class="btn btn-success" type="submit" value="Calculator Discount"></div>
 </form>
 </body>
 </html>
