@@ -3,9 +3,11 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.rmi.RemoteException;
 
 @WebServlet(name = "CalculatorServlet", value = "/CalculatorServlet")
 public class CalculatorServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -16,6 +18,7 @@ public class CalculatorServlet extends HttpServlet {
         float firstNumber = Float.parseFloat(request.getParameter("first"));
         float secondNumber = Float.parseFloat(request.getParameter("second"));
         float result = 0;
+        PrintWriter writer = response.getWriter();
         String operator = request.getParameter("Operator");
         switch (operator) {
             case "Addition":
@@ -28,23 +31,26 @@ public class CalculatorServlet extends HttpServlet {
                 result = firstNumber * secondNumber;
                 break;
             case "Division":
-                try{
+                if (secondNumber != 0) {
                     result = firstNumber / secondNumber;
-                } catch (ArithmeticException e){
-                    e.getMessage();
+                } else {
+                    try {
+                        throw new ArithmeticException("Error: /by zero");
+                    } catch (ArithmeticException e) {
+                        writer.println(e.getMessage());
+                    }
                 }
                 break;
             default:
-                System.out.println("Check again");
-                break;
+                throw new RuntimeException();
         }
-//        PrintWriter printWriter = response.getWriter();
-//        printWriter.print("<h1>Result:</h1>");
-//        printWriter.print("<h3>" + firstNumber + " "+ operator+ " " + secondNumber + " = " + result + "</h3>");
         request.setAttribute("resultCalculator", result);
         request.setAttribute("first", firstNumber);
         request.setAttribute("second", secondNumber);
         request.setAttribute("operatorCalculator", operator);
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        if (operator.equals("Division") && secondNumber == 0) {
+        } else {
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+        }
     }
 }
