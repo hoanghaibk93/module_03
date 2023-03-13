@@ -17,13 +17,13 @@
 <form>
     <table border="1">
         <tr>
-            <th>id</th>
-            <th>name</th>
-            <th>price</th>
-            <th> description</th>
-            <th>manufacturer</th>
-            <th>edit</th>
-            <th>delete</th>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Manufacturer</th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
         <c:forEach items="${productList}" var="product">
             <tr>

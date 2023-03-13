@@ -20,7 +20,7 @@
 <h1>Create new customer</h1>
 <p>
     <c:if test="${message != null}">
-        <span class="message">${message}</span>
+        <span>${message}</span>
     </c:if>
 </p>
 <p>

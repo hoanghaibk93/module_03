@@ -8,7 +8,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "ProductServlet", value = "/product")
@@ -23,13 +22,13 @@ public class ProductServlet extends HttpServlet {
         }
         switch (action) {
             case "create":
-                showCreareForm(request,response);
+                showCreateForm(request, response);
                 break;
             case "edit":
                 break;
             case "delete":
                 break;
-            case "reseach":
+            case "search":
                 break;
             case "view":
                 break;
@@ -48,16 +47,18 @@ public class ProductServlet extends HttpServlet {
         }
         switch (action) {
             case "create":
+                createProduct(request, response);
                 break;
             case "edit":
                 break;
             case "delete":
                 break;
-            case "reseach":
+            case "search":
                 break;
             case "view":
                 break;
             default:
+                listProducts(request, response);
                 break;
         }
     }
@@ -73,7 +74,37 @@ public class ProductServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
     }
-    private void showCreareForm(HttpServletRequest request, HttpServletResponse response){
-        
+
+    private void showCreateForm(HttpServletRequest request, HttpServletResponse response) {
+//        try {
+//            response.sendRedirect("/product/create.jsp");
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+        try {
+            request.getRequestDispatcher("/product/create.jsp").forward(request,response);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void createProduct(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        double price = Double.parseDouble(request.getParameter("price"));
+        String description = request.getParameter("description");
+        String manufacturer = request.getParameter("manufacturer");
+        Product product = new Product(id, name, price, description, manufacturer);
+        service.save(product);
+        request.setAttribute("message","Create successful");
+        try {
+            request.getRequestDispatcher("/product/create.jsp").forward(request,response);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
