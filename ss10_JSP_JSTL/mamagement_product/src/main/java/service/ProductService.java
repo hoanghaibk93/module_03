@@ -52,6 +52,6 @@ public class ProductService implements IProductService {
                 return entry.getValue();
             }
         }
-        return new Product();
+        return null;
     }
 }

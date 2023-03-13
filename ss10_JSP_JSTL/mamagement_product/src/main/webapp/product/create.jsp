@@ -16,7 +16,7 @@
 <h4><a href="/product">Back to the product list</a></h4>
 <h3>
     <c:if test="${message != null}">
-        <p>${message}</p>
+        <p style="color: coral">${message}</p>
     </c:if>
 </h3>
 <form style="width: 500px" method="post">

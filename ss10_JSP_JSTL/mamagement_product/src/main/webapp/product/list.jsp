@@ -14,6 +14,7 @@
 <body>
 <h1> List Product</h1>
 <h4><a href="/product?action=create">Create new Product</a></h4>
+<h4><a href="/product?action=search">Search new Product</a></h4>
 <form>
     <table border="1">
         <tr>
