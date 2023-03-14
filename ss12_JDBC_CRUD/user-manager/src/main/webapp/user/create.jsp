@@ -14,6 +14,28 @@
     <script src="../bootstrap-5.1.3-dist/js/bootstrap.min.js"></script>
 </head>
 <body>
-<p class="text-primary">sgseg</p>
+<h1>Create new User</h1>
+<h4><a href="/user">Back to the product list</a></h4>
+<h3>
+    <c:if test="${message != null}">
+        <p style="color: coral">${message}</p>
+    </c:if>
+</h3>
+
+<form class="container-fluid" action="/user?action=create" method="post">
+    <div class="mb-3">
+        <label for="formGroupExampleInput2" class="form-label">NAME</label>
+        <input type="text" class="form-control" id="formGroupExampleInput2" name="name">
+    </div>
+    <div class="mb-3">
+        <label for="formGroupExampleInput3" class="form-label">EMALI</label>
+        <input type="text" class="form-control" id="formGroupExampleInput3" name="email">
+    </div>
+    <div class="mb-3">
+        <label for="formGroupExampleInput4" class="form-label">COUNTRY</label>
+        <input type="text" class="form-control" id="formGroupExampleInput4" name="country">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 </body>
 </html>

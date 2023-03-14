@@ -6,7 +6,10 @@ import java.util.List;
 
 public interface IUserRepository {
     public List<User> findAll();
-    public User findById();
-    public boolean deleteUser(int id);
-    public boolean updateUser(int id, User user);
+    public User findById(int id);
+    public void deleteUser(int id);
+    public void updateUser(int id, User user);
+    public void insertUser(User user);
+    public User searchByCountry(String country);
+    public List<User> sortByName();
 }

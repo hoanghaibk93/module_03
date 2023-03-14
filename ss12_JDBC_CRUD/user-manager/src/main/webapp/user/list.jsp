@@ -14,8 +14,11 @@
     <script src="../bootstrap-5.1.3-dist/js/bootstrap.min.js"></script>
 </head>
 <body>
+<h1 class="text-primary display-3">List user</h1>
+<h3><a href="/user?action=create">Back to create user</a></h3>
+<h3><a href="/user?action=search">Back to search user</a></h3>
+<button><a href="/user?action=sort">Sort by name</a></button>
 <table class="table table-hover table-inverse table-responsive">
-
     <thead class="thead-inverse">
     <tr>
         <th>ID</th>
@@ -28,14 +31,14 @@
     </thead>
     <tbody>
     <c:forEach items="${listUsers}" var="user">
-    <tr>
-        <td scope="row">${user.id}</td>
-        <td><a href="/user?action=view&id=${user.id}">${user.name}</a></td>
-        <td>${user.email}</td>
-        <td>${user.country}</td>
-        <td><a href="/user?action=update&id=${user.id}">${user.edit}</a></td>
-        <td><a href="/user?action=delete&id=${user.id}">${user.id}</a></td>
-    </tr>
+        <tr>
+            <td scope="row">${user.id}</td>
+            <td><a href="/user?action=view&id=${user.id}">${user.name}</a></td>
+            <td>${user.email}</td>
+            <td>${user.country}</td>
+            <td><a href="/user?action=update&id=${user.id}">edit</a></td>
+            <td><a href="/user?action=delete&id=${user.id}">delete</a></td>
+        </tr>
     </c:forEach>
     </tbody>
 

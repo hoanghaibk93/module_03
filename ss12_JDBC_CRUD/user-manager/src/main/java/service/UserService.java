@@ -15,17 +15,33 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User findById() {
-        return repository.findById();
+    public User findById(int id) {
+        return repository.findById(id);
     }
 
     @Override
-    public boolean deleteUser(int id) {
-        return repository.deleteUser(id);
+    public void deleteUser(int id) {
+         repository.deleteUser(id);
     }
 
     @Override
-    public boolean updateUser(int id, User user) {
-        return repository.updateUser(id, user);
+    public void updateUser(int id, User user) {
+        repository.updateUser(id, user);
     }
+
+    @Override
+    public void insertUser(User user) {
+        repository.insertUser(user);
+    }
+
+    @Override
+    public User searchByCountry(String country) {
+        return repository.searchByCountry(country);
+    }
+
+    @Override
+    public List<User> sortByName() {
+        return repository.sortByName();
+    }
+
 }
