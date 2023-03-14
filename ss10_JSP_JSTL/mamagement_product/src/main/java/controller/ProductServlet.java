@@ -80,19 +80,20 @@ public class ProductServlet extends HttpServlet {
         }
     }
 
-    private void showCreateForm(HttpServletRequest request, HttpServletResponse response) {
+    private void showCreateForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            response.sendRedirect("/product/create.jsp");
+        } catch (IOException e) {
+            response.sendRedirect("/product/error-404.jsp");
+        }
+        // Cach 2:
 //        try {
-//            response.sendRedirect("/product/create.jsp");
+//            request.getRequestDispatcher("/product/create.jsp").forward(request, response);
+//        } catch (ServletException e) {
+//            throw new RuntimeException(e);
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
-        try {
-            request.getRequestDispatcher("/product/create.jsp").forward(request, response);
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void createProduct(HttpServletRequest request, HttpServletResponse response) {
@@ -231,22 +232,24 @@ public class ProductServlet extends HttpServlet {
             }
         }
     }
+
     private void searchByNameForm(HttpServletRequest request, HttpServletResponse response) {
         try {
-            request.getRequestDispatcher("/product/search.jsp").forward(request,response);
+            request.getRequestDispatcher("/product/search.jsp").forward(request, response);
         } catch (ServletException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
     private void searchByName(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
         Product product = service.search(name);
         if (product == null) {
             request.setAttribute("message", "Not found");
             try {
-                request.getRequestDispatcher("/product/search.jsp").forward(request,response);
+                request.getRequestDispatcher("/product/search.jsp").forward(request, response);
             } catch (ServletException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {

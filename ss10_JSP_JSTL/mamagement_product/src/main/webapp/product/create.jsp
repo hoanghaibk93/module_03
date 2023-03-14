@@ -19,7 +19,7 @@
         <p style="color: coral">${message}</p>
     </c:if>
 </h3>
-<form style="width: 500px" method="post">
+<form style="width: 500px" action="/product?action=create" method="post">
     <fieldset>
         <legend>New Product</legend>
         <table>
