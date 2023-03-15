@@ -8,6 +8,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "UserServlet", urlPatterns = "/user")
@@ -28,7 +29,7 @@ public class UserServlet extends HttpServlet {
                 showEditForm(request, response);
                 break;
             case "view":
-                showViewUser(request,response);
+                showViewUser(request, response);
                 break;
             case "delete":
                 showDeleteForm(request, response);
@@ -40,17 +41,30 @@ public class UserServlet extends HttpServlet {
                 sortByName(request, response);
                 break;
             default:
-                showListUsers(request, response);
+//                showListUsers(request, response);
+                showListUsersMethod(request, response);
                 break;
+        }
+    }
+
+    private void showListUsersMethod(HttpServletRequest request, HttpServletResponse response) {
+        List<User> listUsers = service.findAllMethod();
+        request.setAttribute("listUsers", listUsers);
+        try {
+            request.getRequestDispatcher("/user/list.jsp").forward(request, response);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     private void showViewUser(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("id"));
         User user = service.findById(id);
-        request.setAttribute("user",user);
+        request.setAttribute("user", user);
         try {
-            request.getRequestDispatcher("/user/view.jsp").forward(request,response);
+            request.getRequestDispatcher("/user/view.jsp").forward(request, response);
         } catch (ServletException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -59,8 +73,8 @@ public class UserServlet extends HttpServlet {
     }
 
     private void sortByName(HttpServletRequest request, HttpServletResponse response) {
-    List<User> userList = service.sortByName();
-    request.setAttribute("listUsers",userList);
+        List<User> userList = service.sortByName();
+        request.setAttribute("listUsers", userList);
         try {
             request.getRequestDispatcher("user/list.jsp").forward(request, response);
         } catch (ServletException e) {
@@ -144,7 +158,8 @@ public class UserServlet extends HttpServlet {
                 createUser(request, response);
                 break;
             case "update":
-                editUser(request, response);
+//                editUser(request, response);
+                updateUserMethod(request, response);
                 break;
             case "view":
                 break;
@@ -155,27 +170,46 @@ public class UserServlet extends HttpServlet {
                 searchByCountry(request, response);
                 break;
             default:
-                showListUsers(request, response);
+//                showListUsers(request, response);
                 break;
+        }
+    }
+
+    private void updateUserMethod(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String country = request.getParameter("country");
+        User user = new User(id, name, email, country);
+        service.updateUserMethod(user);
+        request.setAttribute("user", user);
+        request.setAttribute("message", "update successful");
+        try {
+            request.getRequestDispatcher("/user/edit.jsp").forward(request, response);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     private void searchByCountry(HttpServletRequest request, HttpServletResponse response) {
         String country = request.getParameter("country");
-        User user = service.searchByCountry(country);
-        if (user == null) {
+        List<User> userList = service.searchByCountry(country);
+
+        if (userList.isEmpty()) {
             request.setAttribute("message", "Not found");
             try {
-                request.getRequestDispatcher("/user/search.jsp").forward(request, response);
+                request.getRequestDispatcher("/user/list.jsp").forward(request, response);
             } catch (ServletException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
-            request.setAttribute("user", user);
+            request.setAttribute("listUsers", userList);
             try {
-                request.getRequestDispatcher("/user/view.jsp").forward(request, response);
+                request.getRequestDispatcher("/user/list.jsp").forward(request, response);
             } catch (ServletException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {

@@ -35,13 +35,24 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User searchByCountry(String country) {
+    public List<User>  searchByCountry(String country) {
         return repository.searchByCountry(country);
     }
 
     @Override
     public List<User> sortByName() {
         return repository.sortByName();
+    }
+
+    @Override
+    public List<User>  findAllMethod() {
+        return repository.findAllMethod();
+    }
+
+    @Override
+    public void updateUserMethod(User user) {
+        repository.updateUserMethod(user);
+
     }
 
 }

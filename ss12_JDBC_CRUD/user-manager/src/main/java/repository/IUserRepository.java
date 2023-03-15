@@ -10,6 +10,9 @@ public interface IUserRepository {
     public void deleteUser(int id);
     public void updateUser(int id, User user);
     public void insertUser(User user);
-    public User searchByCountry(String country);
+    public List<User>  searchByCountry(String country);
     public List<User> sortByName();
+
+    List<User> findAllMethod();
+    void updateUserMethod(User user);
 }

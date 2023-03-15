@@ -16,8 +16,18 @@
 <body>
 <h1 class="text-primary display-3">List user</h1>
 <h3><a href="/user?action=create">Back to create user</a></h3>
-<h3><a href="/user?action=search">Back to search user</a></h3>
+<%--<h3><a href="/user?action=search">Back to search user</a></h3>--%>
+<h3><a href="/user">Back to the product list</a></h3>
 <button><a href="/user?action=sort">Sort by name</a></button>
+<form class="d-flex w-50" role="search" method="post" action="/user?action=search">
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="country">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+<h3>
+    <c:if test="${message != null}">
+        <p style="color: coral">${message}</p>
+    </c:if>
+</h3>
 <table class="table table-hover table-inverse table-responsive">
     <thead class="thead-inverse">
     <tr>

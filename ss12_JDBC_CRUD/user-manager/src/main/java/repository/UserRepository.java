@@ -3,10 +3,7 @@ package repository;
 import controller.DBConnection;
 import model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +15,7 @@ public class UserRepository implements IUserRepository {
     private static final String UPDATE_USERS_SQL = "UPDATE users SET name =?, email = ?, country = ? WHERE id = ?;";
     private static final String SELECT_USER_BY_COUNTRY = "SELECT * FROM users WHERE country = ?;";
     private static final String SORT_BY_NAME = "SELECT * FROM users ORDER BY name;";
+
     @Override
     public List<User> findAll() {
         Connection connection = DBConnection.getConnection();
@@ -92,8 +90,6 @@ public class UserRepository implements IUserRepository {
     }
 
 
-
-
     @Override
     public void deleteUser(int id) {
         Connection connection = DBConnection.getConnection();
@@ -166,36 +162,45 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public User searchByCountry(String country) {
-        Connection connection = DBConnection.getConnection();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        User user = null;
-        if (connection != null) {
-            try {
-                statement = connection.prepareStatement(SELECT_USER_BY_COUNTRY);
-                statement.setString(1, country);
-                resultSet = statement.executeQuery();
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String name = resultSet.getString("name");
-                    String email = resultSet.getString("email");
-                    user = new User(id, name, email, country);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    resultSet.close();
-                    statement.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                DBConnection.close();
+    public List<User> searchByCountry(String country) {
+        List<User> userList = findAll();
+        List<User> userListByCountry = new ArrayList<>();
+        for (User user : userList) {
+            if (country.equals(user.getCountry())) {
+                userListByCountry.add(user);
             }
         }
-        return user;
+        return userListByCountry;
     }
+//        Connection connection = DBConnection.getConnection();
+//        PreparedStatement statement = null;
+//        ResultSet resultSet = null;
+//        User user = null;
+//        if (connection != null) {
+//            try {
+//                statement = connection.prepareStatement(SELECT_USER_BY_COUNTRY);
+//                statement.setString(1, country);
+//                resultSet = statement.executeQuery();
+//                while (resultSet.next()) {
+//                    int id = resultSet.getInt("id");
+//                    String name = resultSet.getString("name");
+//                    String email = resultSet.getString("email");
+//                    user = new User(id, name, email, country);
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            } finally {
+//                try {
+//                    resultSet.close();
+//                    statement.close();
+//                } catch (SQLException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                DBConnection.close();
+//            }
+//        }
+//        return user;
+//    }
 
     @Override
     public List<User> sortByName() {
@@ -229,5 +234,64 @@ public class UserRepository implements IUserRepository {
             }
         }
         return userList;
+    }
+
+    @Override
+    public List<User> findAllMethod() {
+        Connection connection = DBConnection.getConnection();
+        CallableStatement statement = null;
+        ResultSet resultSet = null;
+        List<User> userList = new ArrayList<>();
+        if (connection != null) {
+            try {
+                statement = connection.prepareCall("call findAll()");
+                resultSet = statement.executeQuery();
+                User user = null;
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String name = resultSet.getString("name");
+                    String email = resultSet.getString("email");
+                    String country = resultSet.getString("country");
+                    user = new User(id, name, email, country);
+                    userList.add(user);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    resultSet.close();
+                    statement.close();
+                    DBConnection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return userList;
+    }
+
+    @Override
+    public void updateUserMethod(User user) {
+        Connection connection = DBConnection.getConnection();
+        CallableStatement statement = null;
+        if (connection != null) {
+            try {
+                statement = connection.prepareCall("call updateUser(?, ?, ?, ?)");
+                statement.setString(1, user.getName());
+                statement.setString(2, user.getEmail());
+                statement.setString(3, user.getCountry());
+                statement.setInt(4, user.getId());
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                DBConnection.close();
+            }
+        }
     }
 }
