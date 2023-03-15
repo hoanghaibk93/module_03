@@ -54,41 +54,41 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public User findById(int id) {
-//        List<User> userList = findAll();
-//        for (User user : userList) {
-//            if (id == user.getId()) {
-//                return user;
-//            }
-//        }
-//        return null;
-        Connection connection = DBConnection.getConnection();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        User user = null;
-        if (connection != null) {
-            try {
-                statement = connection.prepareStatement(SELECT_USER_BY_ID);
-                statement.setInt(1, id);
-                resultSet = statement.executeQuery();
-                while (resultSet.next()) {
-                    String name = resultSet.getString("name");
-                    String email = resultSet.getString("email");
-                    String country = resultSet.getString("country");
-                    user = new User(id, name, email, country);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    resultSet.close();
-                    statement.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                DBConnection.close();
+        List<User> userList = findAll();
+        for (User user : userList) {
+            if (id == user.getId()) {
+                return user;
             }
         }
-        return user;
+        return null;
+//        Connection connection = DBConnection.getConnection();
+//        PreparedStatement statement = null;
+//        ResultSet resultSet = null;
+//        User user = null;
+//        if (connection != null) {
+//            try {
+//                statement = connection.prepareStatement(SELECT_USER_BY_ID);
+//                statement.setInt(1, id);
+//                resultSet = statement.executeQuery();
+//                while (resultSet.next()) {
+//                    String name = resultSet.getString("name");
+//                    String email = resultSet.getString("email");
+//                    String country = resultSet.getString("country");
+//                    user = new User(id, name, email, country);
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            } finally {
+//                try {
+//                    resultSet.close();
+//                    statement.close();
+//                } catch (SQLException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                DBConnection.close();
+//            }
+//        }
+//        return user;
     }
 
 

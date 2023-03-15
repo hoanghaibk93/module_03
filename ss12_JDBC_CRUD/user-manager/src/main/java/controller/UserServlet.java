@@ -28,6 +28,7 @@ public class UserServlet extends HttpServlet {
                 showEditForm(request, response);
                 break;
             case "view":
+                showViewUser(request,response);
                 break;
             case "delete":
                 showDeleteForm(request, response);
@@ -41,6 +42,19 @@ public class UserServlet extends HttpServlet {
             default:
                 showListUsers(request, response);
                 break;
+        }
+    }
+
+    private void showViewUser(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        User user = service.findById(id);
+        request.setAttribute("user",user);
+        try {
+            request.getRequestDispatcher("/user/view.jsp").forward(request,response);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
