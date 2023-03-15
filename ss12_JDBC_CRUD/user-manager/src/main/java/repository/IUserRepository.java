@@ -15,4 +15,6 @@ public interface IUserRepository {
 
     List<User> findAllMethod();
     void updateUserMethod(User user);
+    void deleteUserMethod(int id);
+    void updateUserTransaction();
 }

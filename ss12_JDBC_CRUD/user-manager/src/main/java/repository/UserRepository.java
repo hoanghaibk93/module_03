@@ -294,4 +294,65 @@ public class UserRepository implements IUserRepository {
             }
         }
     }
+
+    @Override
+    public void deleteUserMethod(int id) {
+        Connection connection = DBConnection.getConnection();
+        CallableStatement statement = null;
+        if (connection != null) {
+            try {
+                statement = connection.prepareCall("call deleteUser(?)");
+                statement.setInt(1, id);
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                DBConnection.close();
+            }
+        }
+    }
+
+    @Override
+    public void updateUserTransaction() {
+        Connection connection = DBConnection.getConnection();
+        PreparedStatement statement = null;
+        User user1 = new User(10, "Hung", "hunghon@gmail.com", "ThaiLan");
+        User user2 = new User(11, "Nam", "NamHa@gmail.com", "Lao");
+        Savepoint savepoint = null;
+        if (connection != null) {
+            try {
+                connection.setAutoCommit(false);
+                statement.setString(1, user1.getName());
+                statement.setString(2, user1.getEmail());
+                statement.setString(3, user1.getCountry());
+                statement.executeUpdate();
+                savepoint = connection.setSavepoint();
+                statement = connection.prepareStatement(INSERT_USERS_SQL);
+                statement.setString(1, user2.getName());
+                statement.setString(2, user2.getEmail());
+                statement.setString(3, user2.getCountry());
+                statement.executeUpdate();
+                connection.commit();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                statement = connection.prepareStatement(INSERT_USERS_SQL);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                DBConnection.close();
+            }
+        }
+    }
 }

@@ -40,6 +40,7 @@ public class UserServlet extends HttpServlet {
             case "sort":
                 sortByName(request, response);
                 break;
+
             default:
 //                showListUsers(request, response);
                 showListUsersMethod(request, response);
@@ -164,14 +165,31 @@ public class UserServlet extends HttpServlet {
             case "view":
                 break;
             case "delete":
-                deleteUser(request, response);
+//                deleteUser(request, response);
+                deleteUserMethod(request, response);
                 break;
             case "search":
                 searchByCountry(request, response);
                 break;
+            case "updateTransaction":
+                updateUserTransaction(request, response);
             default:
 //                showListUsers(request, response);
                 break;
+        }
+    }
+
+    private void updateUserTransaction(HttpServletRequest request, HttpServletResponse response) {
+        service.updateUserTransaction();
+    }
+
+    private void deleteUserMethod(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        service.deleteUserMethod(id);
+        try {
+            response.sendRedirect("/user");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

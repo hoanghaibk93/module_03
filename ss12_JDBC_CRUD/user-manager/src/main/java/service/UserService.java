@@ -55,4 +55,14 @@ public class UserService implements IUserService {
 
     }
 
+    @Override
+    public void deleteUserMethod(int id) {
+    repository.deleteUserMethod(id);
+    }
+
+    @Override
+    public void updateUserTransaction() {
+        repository.updateUserTransaction();
+    }
+
 }

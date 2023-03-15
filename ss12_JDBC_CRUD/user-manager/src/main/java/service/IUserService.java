@@ -16,4 +16,8 @@ public interface IUserService {
     List<User>  findAllMethod();
 
     void updateUserMethod(User user);
+
+    void deleteUserMethod(int id);
+
+    void updateUserTransaction();
 }
