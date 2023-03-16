@@ -33,3 +33,11 @@ where id = new_id;
 end; $$
 delimiter ;
 call updateUser('Trung Hoành','hoang.trung@gmail.com','phap',9)
+Delimiter $$
+create procedure deleteUser(in new_id int)
+begin
+delete from users
+where id = new_id;
+end; $$
+delimiter ;
+call deleteUser(3)
